@@ -1,34 +1,51 @@
-# GeeLark SDK for Python
+<div align="center">
 
-[![PyPI version](https://img.shields.io/pypi/v/geelark-sdk.svg)](https://pypi.org/project/geelark-sdk/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Python 3.9+](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/downloads/)
+<img src="./assets/logo.png" alt="GeeLark" width="380" />
 
-Official Python SDK for the [GeeLark](https://www.geelark.com/) cloud phone platform API. Automate cloud phones, antidetect browsers, and social media workflows from Python.
+<br />
+<br />
+
+**Official Python SDK for the [GeeLark](https://www.geelark.com/) Cloud Phone Platform**
+
+[![PyPI version](https://img.shields.io/pypi/v/geelark-sdk.svg?style=flat-square&color=2C8EF8)](https://pypi.org/project/geelark-sdk/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-2C8EF8.svg?style=flat-square)](https://opensource.org/licenses/MIT)
+[![Python](https://img.shields.io/badge/Python-3.9+-2C8EF8.svg?style=flat-square&logo=python&logoColor=white)](https://www.python.org/downloads/)
+
+Automate cloud phones, antidetect browsers, and social media workflows from Python with a fully typed, Pythonic developer experience.
+
+[Getting Started](#-getting-started) · [API Reference](#-module-reference) · [Examples](#-usage-examples) · [Configuration](#%EF%B8%8F-configuration)
+
+</div>
 
 ---
 
-## Features
+## ✨ Features
 
-- **28 modules** covering cloud phones, browsers, social media RPA, and management APIs
-- **145+ methods** mapped one-to-one with the GeeLark OpenAPI
-- **Fully typed** -- every request/response uses `TypedDict` definitions and PEP 561 `py.typed` marker
-- **Synchronous `httpx` transport** with automatic retries, jitter, and transient-error handling
-- **Pythonic `snake_case` API** -- parameters are automatically converted to the `camelCase` the server expects
-- **SHA-256 request signing** handled transparently by the SDK
-- **Context manager** support for clean resource management
-- **Hooks** -- `before_request` and `after_response` callbacks for logging, metrics, or custom middleware
-- **Debug mode** for full request/response tracing
+| | Feature | Details |
+|---|---|---|
+| 📦 | **28 API Modules** | Every GeeLark endpoint covered |
+| 🔧 | **145+ Methods** | Cloud phones, social platforms, browser automation, and more |
+| 🐍 | **Fully Typed** | `TypedDict` definitions + PEP 561 `py.typed` marker |
+| 🔀 | **Pythonic API** | `snake_case` everywhere — auto-converted to `camelCase` for the server |
+| 🔐 | **Auto Signing** | SHA-256 signature generation handled transparently |
+| 🔄 | **Retry Logic** | Automatic retries with jitter and transient-error handling |
+| 🪝 | **Hooks** | `before_request` / `after_response` callbacks for logging & middleware |
+| 🐛 | **Debug Mode** | Full request/response tracing |
+| 📡 | **httpx Transport** | Synchronous `httpx.Client` with connection pooling |
 
-## Installation
+---
+
+## 🚀 Getting Started
+
+### Installation
 
 ```bash
 pip install geelark-sdk
 ```
 
-Requires Python 3.9 or later.
+> Requires **Python 3.9** or later.
 
-## Quick Start
+### Quick Start
 
 ```python
 from geelark import GeelarkClient
@@ -46,7 +63,7 @@ client.phone.start("phone_id_here")
 client.close()
 ```
 
-Or use the context manager:
+Or use the **context manager**:
 
 ```python
 from geelark import GeelarkClient
@@ -56,53 +73,82 @@ with GeelarkClient(app_id="YOUR_APP_ID", api_key="YOUR_API_KEY") as client:
     print(phones)
 ```
 
-## Authentication
+---
 
-GeeLark uses **SHA-256 HMAC-style signing** on every request. The SDK handles this automatically -- you only need to provide your `app_id` and `api_key` (obtained from the GeeLark dashboard).
+## 🔐 Authentication
 
-Each request is signed with:
-- `appId` -- your application ID
-- `traceId` -- a unique UUID per request
-- `ts` -- current timestamp in milliseconds
-- `nonce` -- a short random string
-- `sign` -- `SHA256(appId + traceId + ts + nonce + apiKey).upper()`
+GeeLark uses **SHA-256 request signing**. The SDK handles this automatically — just provide your `app_id` and `api_key`.
 
-You never need to compute the signature yourself.
+Every request includes:
 
-## Module Reference
+| Field | Description |
+|:------|:------------|
+| `appId` | Your application ID |
+| `traceId` | Unique UUID per request |
+| `ts` | Current timestamp in milliseconds |
+| `nonce` | Short random string |
+| `sign` | `SHA256(appId + traceId + ts + nonce + apiKey).upper()` |
 
-| Module | Attribute | Description |
-|--------|-----------|-------------|
-| **Phone** | `client.phone` | Cloud phone CRUD, start/stop, GPS, screenshot, SMS, root, network, contacts |
-| **Upload** | `client.upload` | Get pre-signed upload URLs, upload files to GeeLark cloud storage |
-| **Task** | `client.task` | Automation task management -- add, cancel, restart, query, history |
-| **ADB** | `client.adb` | ADB connection data and status management |
-| **Analytics** | `client.analytics` | Social media analytics accounts and data |
-| **App** | `client.app` | Application install, uninstall, start, stop, upload, permissions |
-| **File Management** | `client.file_management` | File upload results, keybox upload and results |
-| **Library** | `client.library` | Material and tag management for media assets |
-| **Shell** | `client.shell` | Execute shell commands on cloud phones |
-| **Webhook** | `client.webhook` | Set and get webhook callback URLs |
-| **OEM** | `client.oem` | White-label / OEM customisation settings |
-| **TikTok** | `client.tiktok` | Video/image publishing, warmup, login, profile editing, comments, messages |
-| **Instagram** | `client.instagram` | Login, publish Reels (video/image), warmup, direct messages |
-| **Reddit** | `client.reddit` | Warmup, post videos, post images |
-| **YouTube** | `client.youtube` | Publish Shorts, publish videos, channel maintenance |
-| **Google** | `client.google` | Google login, app download, app browser |
-| **SHEIN** | `client.shein` | SHEIN auto-login |
-| **X (Twitter)** | `client.x` | Publish content to X |
-| **Pinterest** | `client.pinterest` | Publish videos and images to Pinterest |
-| **Threads** | `client.threads` | Publish videos and images to Threads |
-| **Facebook** | `client.facebook` | Login, auto-comment, maintenance, publish, Reels, messages |
-| **RPA Utils** | `client.rpa_utils` | Multi-platform distribution, file upload, contacts, keybox, custom flows |
-| **Billing** | `client.billing` | Balance inquiry, plan management, renewal |
-| **Group** | `client.group` | Phone/browser group CRUD |
-| **Proxy Mgmt** | `client.proxy_mgmt` | Proxy add, delete, list, update |
-| **Tag** | `client.tag` | Tag CRUD for organising phones/browsers |
-| **Proxy Detection** | `client.proxy_detection` | Check proxy connectivity and geo info |
-| **Browser** | `client.browser` | Antidetect browser CRUD, launch/close, tasks, transfer |
+> 💡 You never need to compute signatures yourself.
 
-## Usage Examples
+---
+
+## 📚 Module Reference
+
+<table>
+<thead>
+<tr>
+<th align="left">Category</th>
+<th align="left">Attribute</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+
+<tr><td colspan="3"><strong>☁️ Cloud Phone</strong></td></tr>
+<tr><td></td><td><code>client.phone</code></td><td>Lifecycle — list, create, start, stop, delete, GPS, screenshots, contacts</td></tr>
+<tr><td></td><td><code>client.adb</code></td><td>ADB access — get connection data, enable/disable</td></tr>
+<tr><td></td><td><code>client.shell</code></td><td>Shell command execution on cloud phones</td></tr>
+
+<tr><td colspan="3"><strong>🤖 Social Media RPA</strong></td></tr>
+<tr><td></td><td><code>client.tiktok</code></td><td>Video/image publishing, warmup, login, comments, DMs</td></tr>
+<tr><td></td><td><code>client.instagram</code></td><td>Login, publish Reels (video/image), warmup, DMs</td></tr>
+<tr><td></td><td><code>client.facebook</code></td><td>Login, comments, publish, Reels, DMs</td></tr>
+<tr><td></td><td><code>client.youtube</code></td><td>Publish Shorts/videos, channel maintenance</td></tr>
+<tr><td></td><td><code>client.x</code></td><td>Publish content to X (Twitter)</td></tr>
+<tr><td></td><td><code>client.reddit</code></td><td>Warmup, post videos/images</td></tr>
+<tr><td></td><td><code>client.pinterest</code></td><td>Publish videos and images</td></tr>
+<tr><td></td><td><code>client.threads</code></td><td>Publish videos and images</td></tr>
+<tr><td></td><td><code>client.google</code></td><td>Login, app download, app browsing</td></tr>
+<tr><td></td><td><code>client.shein</code></td><td>Auto-login</td></tr>
+
+<tr><td colspan="3"><strong>🌐 Browser</strong></td></tr>
+<tr><td></td><td><code>client.browser</code></td><td>Antidetect browser — create, launch, close, tasks, transfer</td></tr>
+
+<tr><td colspan="3"><strong>⚙️ Automation & Tasks</strong></td></tr>
+<tr><td></td><td><code>client.task</code></td><td>Task management — add, cancel, restart, query, history</td></tr>
+<tr><td></td><td><code>client.rpa_utils</code></td><td>Multi-platform distribution, file upload, contacts, custom flows</td></tr>
+
+<tr><td colspan="3"><strong>🗂️ Management</strong></td></tr>
+<tr><td></td><td><code>client.upload</code></td><td>Get pre-signed upload URLs, upload files to cloud storage</td></tr>
+<tr><td></td><td><code>client.analytics</code></td><td>Social media analytics accounts and data</td></tr>
+<tr><td></td><td><code>client.app</code></td><td>Application install, uninstall, start, stop, upload, permissions</td></tr>
+<tr><td></td><td><code>client.file_management</code></td><td>File upload results, keybox upload and results</td></tr>
+<tr><td></td><td><code>client.library</code></td><td>Material and tag management for media assets</td></tr>
+<tr><td></td><td><code>client.webhook</code></td><td>Set and get webhook callback URLs</td></tr>
+<tr><td></td><td><code>client.oem</code></td><td>White-label / OEM customisation settings</td></tr>
+<tr><td></td><td><code>client.billing</code></td><td>Balance inquiry, plan management, renewal</td></tr>
+<tr><td></td><td><code>client.group</code></td><td>Phone/browser group CRUD</td></tr>
+<tr><td></td><td><code>client.proxy_mgmt</code></td><td>Proxy add, delete, list, update</td></tr>
+<tr><td></td><td><code>client.tag</code></td><td>Tag CRUD for organising phones/browsers</td></tr>
+<tr><td></td><td><code>client.proxy_detection</code></td><td>Check proxy connectivity and geo info</td></tr>
+
+</tbody>
+</table>
+
+---
+
+## 💻 Usage Examples
 
 ### Cloud Phone Management
 
@@ -182,7 +228,9 @@ debug_port = result["debugPort"]
 client.browser.close(profile["id"])
 ```
 
-## Error Handling
+---
+
+## ❌ Error Handling
 
 All API errors raise `GeelarkError` with structured information:
 
@@ -201,7 +249,17 @@ except GeelarkError as e:
     print(e.details)      # Full response dict from the server
 ```
 
-## Configuration
+| Property | Type | Description |
+|:---------|:-----|:------------|
+| `message` | `str` | Human-readable error message |
+| `code` | `str` | GeeLark error code |
+| `endpoint` | `str` | API endpoint that failed |
+| `http_status` | `int` | HTTP status code |
+| `details` | `dict` | Full response dict from the server |
+
+---
+
+## ⚙️ Configuration
 
 ```python
 client = GeelarkClient(
@@ -220,10 +278,10 @@ client = GeelarkClient(
     # Default values merged into certain modules (e.g. taskType for TikTok)
     defaults={"taskType": 1},
 
-    # Hook called before every request with context dict
+    # Hook called before every request
     before_request=lambda ctx: print(f"-> {ctx['path']}"),
 
-    # Hook called after every response with context dict
+    # Hook called after every response
     after_response=lambda ctx: print(f"<- {ctx['status']}"),
 )
 ```
@@ -245,6 +303,12 @@ with GeelarkClient(app_id="...", api_key="...") as client:
     client.phone.list()
 ```
 
-## License
+---
 
-MIT -- see [LICENSE](LICENSE) for details.
+<div align="center">
+
+**[GeeLark Website](https://www.geelark.com/)** · **[API Documentation](https://docs.geelark.com/)** · **[Report an Issue](https://github.com/UrielAbel/geelark-sdk-python/issues)**
+
+<sub>MIT License — © 2024-2025 GeeLark SDK Contributors</sub>
+
+</div>
