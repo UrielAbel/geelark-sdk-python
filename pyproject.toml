@@ -1,0 +1,54 @@
+[project]
+name = "geelark-sdk"
+version = "1.0.0"
+description = "Official GeeLark Cloud Phone & Browser SDK for Python"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.9"
+dependencies = ["httpx>=0.24.0"]
+keywords = ["geelark", "cloud-phone", "antidetect", "browser", "automation", "rpa"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Internet :: WWW/HTTP",
+    "Typing :: Typed",
+]
+
+[project.optional-dependencies]
+dev = ["mypy>=1.0", "ruff>=0.4", "pytest>=8.0", "pytest-mock>=3.12", "pytest-httpx>=0.30"]
+
+[project.urls]
+Homepage = "https://www.geelark.com/"
+Repository = "https://github.com/geelark/geelark-sdk-python"
+Changelog = "https://github.com/geelark/geelark-sdk-python/blob/main/CHANGELOG.md"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/geelark"]
+
+[tool.ruff]
+target-version = "py39"
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.mypy]
+python_version = "3.9"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
